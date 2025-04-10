@@ -5,31 +5,28 @@
 package com.vdk.pojo;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  *
  * @author Asus
  */
 @Entity
-@Table(name = "category")
+@Table(name = "prod_tag")
 @NamedQueries({
-    @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"),
-    @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id"),
-    @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name"),
-    @NamedQuery(name = "Category.findByDescription", query = "SELECT c FROM Category c WHERE c.description = :description")})
-public class Category implements Serializable {
+    @NamedQuery(name = "ProdTag.findAll", query = "SELECT p FROM ProdTag p"),
+    @NamedQuery(name = "ProdTag.findById", query = "SELECT p FROM ProdTag p WHERE p.id = :id")})
+public class ProdTag implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -37,24 +34,18 @@ public class Category implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @Column(name = "name")
-    private String name;
-    @Column(name = "description")
-    private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
-    private Set<Product> productSet;
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Product productId;
+    @JoinColumn(name = "tag_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Tag tagId;
 
-    public Category() {
+    public ProdTag() {
     }
 
-    public Category(Integer id) {
+    public ProdTag(Integer id) {
         this.id = id;
-    }
-
-    public Category(Integer id, String name) {
-        this.id = id;
-        this.name = name;
     }
 
     public Integer getId() {
@@ -65,28 +56,20 @@ public class Category implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Product getProductId() {
+        return productId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductId(Product productId) {
+        this.productId = productId;
     }
 
-    public String getDescription() {
-        return description;
+    public Tag getTagId() {
+        return tagId;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Set<Product> getProductSet() {
-        return productSet;
-    }
-
-    public void setProductSet(Set<Product> productSet) {
-        this.productSet = productSet;
+    public void setTagId(Tag tagId) {
+        this.tagId = tagId;
     }
 
     @Override
@@ -99,10 +82,10 @@ public class Category implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Category)) {
+        if (!(object instanceof ProdTag)) {
             return false;
         }
-        Category other = (Category) object;
+        ProdTag other = (ProdTag) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -111,7 +94,7 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return "com.vdk.pojo.Category[ id=" + id + " ]";
+        return "com.vdk.pojo.ProdTag[ id=" + id + " ]";
     }
     
 }
